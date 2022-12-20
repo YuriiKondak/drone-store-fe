@@ -48,7 +48,8 @@ export const AuthProvider = ({children}: any) => {
         setLoading(true);
 
         AuthService.SignOut().then((res) => {
-
+            StorageManager.deleteAuthData();
+            setUser(null);
         }).catch(err =>{
             console.warn(err)
         });

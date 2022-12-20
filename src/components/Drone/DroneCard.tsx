@@ -1,7 +1,6 @@
-import { Card, Image, Text, Group, Badge, createStyles, Center, Button, Anchor } from '@mantine/core';
-import { IconGasStation, IconGauge, IconManualGearbox, IconUsers, TablerIcon } from '@tabler/icons';
+import { Card, Image, Text, Group, createStyles, Center, Button } from '@mantine/core';
 import { Link } from "react-router-dom";
-
+import { DroneCardProps } from "./DroneCardModel";
 const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
@@ -37,33 +36,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const mockdata = [
-  { label: '4 passengers', icon: IconUsers },
-  { label: '100 km/h in 4 seconds', icon: IconGauge },
-  { label: 'Automatic gearbox', icon: IconManualGearbox },
-  { label: 'Electric', icon: IconGasStation },
-];
-
-interface DroneCardProps {
-  cardData: {
-    droneName: string
-    photoUrl: string;
-    link: string;
-    information: string;
-    price: number
-    data: {
-      label: string;
-      icon: TablerIcon;
-    }[];
-  }
-}
 
 const DroneClick = () => {
 
 }
 
 
-export function DroneCard({ cardData }: DroneCardProps) {
+const DroneCard = ({ cardData }: DroneCardProps) => {
   const { classes } = useStyles();
   const features = cardData.data.map((feature) => (
     <Center key={feature.label}>
@@ -101,7 +80,7 @@ export function DroneCard({ cardData }: DroneCardProps) {
               ${cardData.price}
             </Text>
           </div>
-          <Button component={Link} to={"/drone/:id"} radius="xl" style={{ flex: 1 }}>
+          <Button component={Link} to={"/drone/mavic3"} radius="xl" style={{ flex: 1 }}>
             Buy Now
           </Button>
         </Group>
@@ -109,3 +88,5 @@ export function DroneCard({ cardData }: DroneCardProps) {
     </Card>
   );
 }
+
+export default DroneCard;

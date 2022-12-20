@@ -86,9 +86,9 @@ export function HeaderSimple({ links }: HeaderSimpleProps) {
   });
 
   return (
-    <Header height={60} mb={120}>
+    <Header height={60}>
       <Container className={classes.header}>
-        <span>Drone Store</span>
+        <Link style={{textDecoration: "none", color: "black"}} to={"/"}>Drone Store</Link>
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>

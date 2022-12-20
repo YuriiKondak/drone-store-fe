@@ -1,5 +1,5 @@
 const APIConfig = {
-    URL: "http://localhost:3030/"
+    URL: "http://localhost:3040/"
 };
 
 export default APIConfig;

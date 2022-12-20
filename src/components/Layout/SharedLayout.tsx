@@ -1,4 +1,4 @@
-import React, { Suspense, useContext, useEffect } from 'react';
+import { Suspense, useContext } from 'react';
 import { HeaderSimple } from "../header/Header"
 import { FooterCentered } from "../FooterLinks/FooterLinks"
 import { Outlet } from "react-router-dom";
@@ -34,16 +34,16 @@ function SharedLayout() {
     const getLinks = () => {
         const links = [
             {
-                "link": "/about",
-                "label": "Features"
+                "link": "/",
+                "label": "Store"
             },
             {
                 "link": "/pricing",
                 "label": "Pricing"
             },
             {
-                "link": "/learn",
-                "label": "Learn"
+                "link": "/cart",
+                "label": "Cart"
             }
         ]
 

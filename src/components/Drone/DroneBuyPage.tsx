@@ -1,106 +1,151 @@
-import { Card, Image, Text, Group, Badge, createStyles, Center, Button, Anchor } from '@mantine/core';
+import { Carousel } from '@mantine/carousel';
+import { IconStar } from '@tabler/icons';
+import { Card, Image, Text, Group, Badge, createStyles, Center, Button, Anchor, Container, SimpleGrid, Grid } from '@mantine/core';
 import { IconGasStation, IconGauge, IconManualGearbox, IconUsers, TablerIcon } from '@tabler/icons';
-
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+import { CommentHtml } from '../CommentHtml/CommentHtml';
+import Colors from "../../constants/colors/drones/colors";
+const useStyles = createStyles((theme, _params, getRef) => ({
+  price: {
+    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
   },
 
-  imageSection: {
-    padding: theme.spacing.md,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottom: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-      }`,
+  carousel: {
+    '&:hover': {
+      [`& .${getRef('carouselControls')}`]: {
+        opacity: 1,
+      },
+    },
   },
 
-  label: {
-    marginBottom: theme.spacing.xs,
-    lineHeight: 1,
-    fontWeight: 700,
-    fontSize: theme.fontSizes.xs,
-    letterSpacing: -0.25,
-    textTransform: 'uppercase',
+  carouselControls: {
+    ref: getRef('carouselControls'),
+    transition: 'opacity 150ms ease',
+    opacity: 0,
   },
 
-  section: {
-    padding: theme.spacing.md,
-    borderTop: `1px solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
-      }`,
+  carouselIndicator: {
+    width: 4,
+    height: 4,
+    transition: 'width 250ms ease',
+
+    '&[data-active]': {
+      width: 16,
+    },
   },
 
-  icon: {
-    marginRight: 5,
-    color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[5],
+  droneInformation: {
+    color: Colors.gray,
   },
+
+  rightSection: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around"
+  }
 }));
 
-const mockdata = [
-  { label: '4 passengers', icon: IconUsers },
-  { label: '100 km/h in 4 seconds', icon: IconGauge },
-  { label: 'Automatic gearbox', icon: IconManualGearbox },
-  { label: 'Electric', icon: IconGasStation },
+const images = [
+  require("../../images/drone-images/mavic3/buy1.jpeg"),
+  require("../../images/drone-images/mavic3/buy2.jpeg"),
+  require("../../images/drone-images/mavic3/buy3.jpeg"),
+  require("../../images/drone-images/mavic3/buy4.jpeg")
 ];
 
-interface DroneBuyPageProps {
-    cardData: {
-      droneName: string
-      photoUrl: string;
-      link: string;
-      information: string;
-      price: number
-      data: {
-        label: string;
-        icon: TablerIcon;
-      }[];
-    }
+const comment = {
+  "postedAt": "10 minutes ago",
+  "body": "<p>I use <a href=\"https://heroku.com/\" rel=\"noopener noreferrer\" target=\"_blank\">Heroku</a> to host my Node.js application, but MongoDB add-on appears to be too <strong>expensive</strong>. I consider switching to <a href=\"https://www.digitalocean.com/\" rel=\"noopener noreferrer\" target=\"_blank\">Digital Ocean</a> VPS to save some cash.</p>",
+  "author": {
+    "name": "Jacob Warnhalter",
+    "image": "https://images.unsplash.com/photo-1624298357597-fd92dfbec01d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80"
   }
+}
+
+
+interface DroneBuyPageProps {
+  cardData: {
+    droneName: string
+    photoUrl: string;
+    link: string;
+    information: string;
+    price: number
+    data: {
+      label: string;
+      icon: TablerIcon;
+    }[];
+  }
+}
 
 
 export function DroneBuyPage({ cardData }: DroneBuyPageProps) {
   const { classes } = useStyles();
-  const features = cardData.data.map((feature) => (
-    <Center key={feature.label}>
-      <feature.icon size={18} className={classes.icon} stroke={1.5} />
-      <Text size="xs">{feature.label}</Text>
-    </Center>
+
+  const slides = images.map((image) => (
+    <Carousel.Slide key={image}>
+      <Image src={image} height={220} />
+    </Carousel.Slide>
   ));
 
   return (
-    <Card withBorder radius="md" className={classes.card}>
-      <Card.Section className={classes.imageSection}>
-        <Image src={cardData.photoUrl} alt={cardData.information} />
-      </Card.Section>
+    <Container my="md">
+      <SimpleGrid cols={2} spacing="md" style={{ marginBottom: 50 }} breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+        <Grid gutter="md">
+          <Grid.Col span={12}>
+            <Card radius="md" withBorder p="xl">
+              <Card.Section>
+                <Carousel
+                  withIndicators
+                  loop
+                  classNames={{
+                    root: classes.carousel,
+                    controls: classes.carouselControls,
+                    indicator: classes.carouselIndicator,
+                  }}
+                >
+                  {slides}
+                </Carousel>
+              </Card.Section>
 
-      <Group position="apart" mt="md">
-        <div>
-          <Text weight={500}>{cardData.droneName}</Text>
-        </div>
-      </Group>
+              <Group position="apart" mt="lg">
+                <Text weight={500} size="lg">
+                  DJI Mavic 3
+                </Text>
 
-      <Card.Section className={classes.section} mt="md">
-        <Text size="sm" color="dimmed" className={classes.label}>
-          Basic configuration
-        </Text>
+                <Group spacing={5}>
+                  <IconStar size={16} />
+                  <Text size="xs" weight={500}>
+                    USD $2,049
+                  </Text>
+                </Group>
+              </Group>
 
-        <Group spacing={8} mb={-8}>
-          {features}
-        </Group>
-      </Card.Section>
+            </Card>
+          </Grid.Col>
+        </Grid>
+        <Grid gutter="md">
+          <Grid.Col className={classes.rightSection}>
+              <div>
+                <h3>DJI MAVIC 3</h3>
+                <h4>USD $800</h4>
+              </div>
+              <nav className={classes.droneInformation}>
+                <li>Under 249 g</li>
+                <li>Extended Battery Life</li>
+                <li>4K HDR Video</li>
+                <li>True Vertical Shooting</li>
+                <li>Intelligent Features</li>
+                <li>38kph (Level 5) Wind Resistance</li>
+                <li>Beginner-Friendly, Easy-To-Fly, and Easy-To-Use</li>
+              </nav>
+            <div>
+              <Button radius="xl" style={{ flex: 1 }}>
+                Shop Now
+              </Button>
+            </div>
+          </Grid.Col>
+        </Grid>
+      </SimpleGrid>
 
-      <Card.Section className={classes.section}>
-        <Group spacing={30}>
-          <div>
-            <Text size="xl" weight={700} sx={{ lineHeight: 1 }}>
-              ${cardData.price}
-            </Text>
-          </div>
-          <Button radius="xl" style={{ flex: 1 }}>
-            Buy Now
-          </Button>
-        </Group>
-      </Card.Section>
-    </Card>
+      <CommentHtml postedAt={comment.postedAt} body={comment.body} author={comment.author} />
+    </Container >
   );
 }
